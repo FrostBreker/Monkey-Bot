@@ -23,5 +23,25 @@ module.exports = {
                 });
             }).catch(() => res.status(404).send("User not found"));
         })
+
+        app.use("/curentlyon/:id", async (req, res) => {
+            const id = req.params.id;
+            await guild.members.fetch(id).then((data) => {
+                const presence = data.presence;
+                const activities = presence.activities;
+                if (activities.length > 0) {
+                    for (let i = 0; i < activities.length; i++) {
+                        if (activities[i].type === "PLAYING" && activities[i].name === "Visual Studio Code") {
+                            res.status(200).send(activities[i].details + " in " + (activities[i].state.split(" ")[2]).split(".")[1].split(":")[0]);
+                            break;
+                        } else {
+                            res.status(200).send("nothing :(");
+                        }
+                    }
+                } else {
+                    res.status(200).send("nothing :(");
+                }
+            }).catch(() => res.status(404).send("User not found"));
+        })
     }
 }
