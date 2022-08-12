@@ -1,18 +1,15 @@
 const { MessageEmbed } = require("discord.js");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("pp")
+    .setDescription("Affichier la pp de la personne mentionnée")
+    .addUserOption(option => option.setName("utilisateur").setRequired(true).setDescription("Afficher la pp de cette utilisateur"))
 
 module.exports = {
-    name: "pp",
     admin: false,
+    data,
     description: "Affichier la pp de la personne mentionnée",
-    category: "Misc",
-    options: [
-        {
-            name: "utilisateur",
-            description: "Utilisateur",
-            type: "USER",
-            required: true
-        }
-    ],
     runSlash: async (client, interaction) => {
         const data = []
         interaction.options._hoistedOptions.forEach((x) => {

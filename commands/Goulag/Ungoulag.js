@@ -1,19 +1,16 @@
 const config = require("../../config");
 const { userGoToGoulag } = require("../../Embeds/Misc");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("ungoulag")
+    .setDescription("Retire un utilisateur du goulag!")
+    .addUserOption(option => option.setName("utilisateur").setRequired(true).setDescription("Utilisateur à retirer du goulag"))
 
 module.exports = {
-    name: "ungoulag",
     admin: true,
+    data: data,
     description: "Retire un utilisateur du goulag!",
-    category: "Goulag",
-    options: [
-        {
-            name: "utilisateur",
-            description: "Utilisateur à retirer du goulag",
-            type: "USER",
-            required: true
-        }
-    ],
     runSlash: async (client, interaction) => {
         const data = []
         interaction.options._hoistedOptions.forEach((x) => {

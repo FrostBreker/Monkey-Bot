@@ -1,21 +1,15 @@
-const config = require("../../config");
-const ms = require("ms");
-const { clearMessages } = require("../../Embeds/Misc");
 const { MessageEmbed } = require("discord.js");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("userinfo")
+    .setDescription("Voir les info d'un compte")
+    .addUserOption(option => option.setName("utilisateur").setRequired(true).setDescription("Information de cette utilisateur"))
 
 module.exports = {
-    name: "userinfo",
     admin: false,
     description: "Voir les info d'un compte",
-    category: "Misc",
-    options: [
-        {
-            name: "utilisateur",
-            description: "Utilisateur",
-            type: "USER",
-            required: true
-        }
-    ],
+    data: data,
     runSlash: async (client, interaction) => {
         const data = []
         interaction.options._hoistedOptions.forEach((x) => {

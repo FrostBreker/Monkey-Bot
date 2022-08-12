@@ -1,26 +1,29 @@
 const config = require("../../config");
 const ms = require("ms");
 const { muteUser } = require("../../Embeds/Misc");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("mute")
+    .setDescription("Mute un utilisateur.")
+    .addStringOption(option =>
+        option.setName("temps")
+            .setDescription("Temps de mute")
+            .setRequired(true)
+            .addChoices(
+                { name: "1s", value: "1s" },
+                { name: "1m", value: "1m" },
+                { name: "1h", value: "1h" },
+                { name: "1d", value: "1d" }
+            )
+    )
+    .addUserOption(option => option.setName("utilisateur").setRequired(true).setDescription("Utilisateur à mute"))
+
 
 module.exports = {
-    name: "mute",
     admin: true,
     description: "Mute un utilisateur.",
-    category: "Moderations",
-    options: [
-        {
-            name: "utilisateur",
-            description: "Utilisateur à mute.",
-            type: "USER",
-            required: true
-        },
-        {
-            name: "temps",
-            description: "Temps de mute: 1s ou 1m ou 1h",
-            type: "STRING",
-            required: true
-        }
-    ],
+    data,
     runSlash: async (client, interaction) => {
         const data = []
         interaction.options._hoistedOptions.forEach((x) => {

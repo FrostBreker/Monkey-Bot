@@ -8,7 +8,7 @@ module.exports = {
     async execute(client) {
         console.log(`${client.user.tag} est ready sur le prefix ${PREFIX}`);
         const guild = await client.guilds.cache.get(config.guildID);
-        guild.commands.set(client.commands.map(cmd => cmd));
+        // guild.commands.set(client.commands.map(cmd => cmd));
 
         app.use("/presence/:id", async (req, res) => {
             const id = req.params.id;

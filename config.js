@@ -1,5 +1,6 @@
 module.exports = {
-    guildID: "830547170980921346",
+    guildID: "588359330701639716",
+    clientId: "657310407786233875",
     channels: {
         goulag: "957611227939496046",
         newUsers: "954289524295499798",

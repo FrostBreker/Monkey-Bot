@@ -1,10 +1,15 @@
 const voiceClient = require('../../utils/VoiceClient');
 const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("voice-leaderboard")
+    .setDescription("Voire le leaderboard des membres en vocal.")
+
 module.exports = {
-    name: "voice-leaderboard",
     admin: false,
+    data,
     description: "Voire le leaderboard des membres en vocal.",
-    category: "Voix",
     runSlash: async (client, interaction) => {
         await interaction.deferReply({ emphemeral: true });
         const embed = await voiceClient.generateLeaderboard({

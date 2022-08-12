@@ -1,26 +1,28 @@
 const config = require("../../config");
 const ms = require("ms");
 const { userGoToGoulag } = require("../../Embeds/Misc");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("goulag")
+    .setDescription("Envoie un utilisateur au goulag!")
+    .addStringOption(option =>
+        option.setName("temps")
+            .setDescription("Temps au goulag")
+            .setRequired(true)
+            .addChoices(
+                { name: "1s", value: "1s" },
+                { name: "1m", value: "1m" },
+                { name: "1h", value: "1h" },
+                { name: "1d", value: "1d" }
+            )
+    )
+    .addUserOption(option => option.setName("utilisateur").setRequired(true).setDescription("Utilisateur à mettre au goulag"))
 
 module.exports = {
-    name: "goulag",
     admin: true,
+    data: data,
     description: "Envoie un utilisateur au goulag!",
-    category: "Goulag",
-    options: [
-        {
-            name: "utilisateur",
-            description: "Utilisateur à mettre au goulag",
-            type: "USER",
-            required: true
-        },
-        {
-            name: "temps",
-            description: "Temps au goulag: 1s ou 1m ou 1h",
-            type: "STRING",
-            required: true
-        }
-    ],
     runSlash: async (client, interaction) => {
         const data = []
         interaction.options._hoistedOptions.forEach((x) => {

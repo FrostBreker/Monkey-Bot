@@ -1,19 +1,16 @@
 const config = require("../../config");
 const { muteUser } = require("../../Embeds/Misc");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("unmute")
+    .setDescription("Unmute un utilisateur.")
+    .addUserOption(option => option.setName("utilisateur").setRequired(true).setDescription("Utilisateur à unmute"))
 
 module.exports = {
-    name: "unmute",
     admin: true,
     description: "Unmute un utilisateur.",
-    category: "Moderations",
-    options: [
-        {
-            name: "utilisateur",
-            description: "Utilisateur à unmute.",
-            type: "USER",
-            required: true
-        }
-    ],
+    data,
     runSlash: async (client, interaction) => {
         const data = []
         interaction.options._hoistedOptions.forEach((x) => {

@@ -1,21 +1,16 @@
 const config = require("../../config");
 const { clearMessages } = require("../../Embeds/Misc");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const data = new SlashCommandBuilder()
+    .setName("clear")
+    .setDescription("Clear des messages")
+    .addNumberOption(option => option.setMaxValue(100).setMinValue(2).setName("nombres").setRequired(true).setDescription("Nombres de messages"))
 
 module.exports = {
-    name: "clear",
     admin: true,
     description: "Clear des messages",
-    category: "Moderations",
-    options: [
-        {
-            name: "nombres",
-            description: "Nombres de messages",
-            type: "NUMBER",
-            required: true,
-            minValue: 2,
-            maxValue: 100
-        }
-    ],
+    data,
     runSlash: async (client, interaction) => {
         const data = [];
         interaction.options._hoistedOptions.forEach((x) => {
@@ -30,6 +25,8 @@ module.exports = {
         channel.bulkDelete(number).then(() => {
             logChannel.send({ embeds: [clearMessages(user, number)], ephemeral: true });
             interaction.reply({ embeds: [clearMessages(user, number)], ephemeral: true });
+        }).catch(() => {
+            interaction.reply({ content: "Je ne peux pas supprimer les messages", ephemeral: true });
         })
     }
 }
