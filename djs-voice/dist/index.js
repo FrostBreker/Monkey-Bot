@@ -18,9 +18,10 @@ class VoiceClient {
         })),
         user: mongoose_1.default.model("djs-voice-users", new mongoose_1.default.Schema({
             User: String,
+            startAt: Number,
             Time: Number,
             Guild: String,
-        })),
+        }, { timestamps: true })),
     };
     constructor(options) {
         if (mongoose_1.default.connection.readyState === 1)
@@ -65,24 +66,18 @@ class VoiceClient {
             this.schemas.timer.findOne({ User: userID, Guild: guildID }, async (err, timerData) => {
                 if (!timerData)
                     return;
-                this.schemas.user.findOne({ User: userID, Guild: guildID }, async (err, userData) => {
-                    const Time = Date.now() - timerData.Start;
-                    timerData.delete();
-                    if (this.options.debug)
-                        console.log(ms_1.default(Time, { long: true }) +
-                            ` for ${newState.member.user.tag}`);
-                    if (!userData) {
-                        new this.schemas.user({
-                            User: userID,
-                            Time,
-                            Guild: guildID,
-                        }).save();
-                    }
-                    else {
-                        userData.Time += Time;
-                        userData.save();
-                    }
-                });
+                const Time = Date.now() - timerData.Start;
+                timerData.delete();
+                if (this.options.debug)
+                    console.log(ms_1.default(Time, { long: true }) +
+                        ` for ${newState.member.user.tag}`);
+                new this.schemas.user({
+                    User: userID,
+                    startAt: timerData.Start,
+                    Time,
+                    Guild: guildID,
+                }).save();
+
             });
         }
     }
@@ -116,10 +111,32 @@ class VoiceClient {
      * @description Generating a leaderbord
      */
     async generateLeaderboard(options) {
-        let { guild, title, color, top, thumbnail } = options;
+        let { guild, title, color, top, thumbnail, time } = options;
         const data = await this.sortUsers(guild);
+        const ref = [];
+        const findUserIdInRef = (id) => {
+            return ref.findIndex((x) => x.User === id);
+        };
+        for (let i = 0; i < data.length; i++) {
+            const el = [];
+            if (time) {
+                if (Date.now() - ((time * 60) * 1000) < Date.parse(data[i].createdAt)) {
+                    if (findUserIdInRef(data[i].User) === -1) {
+                        ref.push(data[i]);
+                    } else {
+                        ref[findUserIdInRef(data[i].User)].Time += data[i].Time;
+                    }
+                }
+            } else {
+                if (findUserIdInRef(data[i].User) === -1) {
+                    ref.push(data[i]);
+                } else {
+                    ref[findUserIdInRef(data[i].User)].Time += data[i].Time;
+                }
+            }
+        }
         let i = 1;
-        const topTen = data.slice(0, top || 10);
+        const topTen = ref.slice(0, top || 10);
         return new discord_js_1.MessageEmbed()
             .setTitle(title || `Leaderboard in **${guild.name}**`)
             .setColor(color || "RANDOM")
