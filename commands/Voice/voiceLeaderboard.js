@@ -36,11 +36,19 @@ module.exports = {
     runSlash: async (client, interaction) => {
         await interaction.deferReply({ emphemeral: true });
         const days = interaction.options.getNumber("jours");
+        let title = "Leaderboard des membres en vocal depuis ";
+        if (days === 1440) title += "1 jour";
+        else if (days === 10080) title += "7 jours";
+        else if (days === 20160) title += "14 jours";
+        else if (days === 43200) title += "30 jours";
+        else title += "toujours";
+
         const embed = await voiceClient.generateLeaderboard({
             message: interaction,
             top: 10,
             guild: interaction.guild,
-            time: days
+            time: days,
+            title: title
         });
 
         const embedPrincipal = new MessageEmbed()

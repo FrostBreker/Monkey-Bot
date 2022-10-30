@@ -136,7 +136,9 @@ class VoiceClient {
             }
         }
         let i = 1;
-        const topTen = ref.slice(0, top || 10);
+        const topTen = ref.sort((a, b) => {
+            return b.Time - a.Time
+        }).slice(0, top || 10);
         return new discord_js_1.MessageEmbed()
             .setTitle(title || `Leaderboard in **${guild.name}**`)
             .setColor(color || "RANDOM")
