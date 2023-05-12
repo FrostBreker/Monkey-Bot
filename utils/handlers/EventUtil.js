@@ -1,10 +1,9 @@
-const { promisify } = require("util");
 const { glob } = require("glob");
-const pGlob = promisify(glob);
+const { join } = require("path");
 
 module.exports = async client => {
-    (await pGlob(`${process.cwd()}/events/*/*.js`)).map(async eventFile => {
-        const event = require(eventFile);
+    (await glob(`${process.cwd()}/events/*/*.js`)).map(async eventFile => {
+        const event = require(join(process.cwd(), eventFile));
 
         if (!eventsList.includes(event.name) || !event.name) {
             return console.log(`------\nEvenement non-déclenchée: erreur de typo (ou pas de nom)\nFichier --> ${eventFile}`);

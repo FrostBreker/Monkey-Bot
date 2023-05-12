@@ -1,17 +1,16 @@
-const { promisify } = require("util");
 const { glob } = require("glob");
+const { join } = require("path");
 const { clientId } = require("../../config");
-const pGlob = promisify(glob);
 const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { Routes } = require('discord-api-types/v10');
 const TOKEN = process.env.TOKEN;
 
 module.exports = async client => {
     let commands = [];
-    (await pGlob(`${process.cwd()}/commands/*/*.js`)).map(commandFile => {
-        const cmd = require(commandFile);
+    (await glob(`${process.cwd()}/commands/*/*.js`)).map(commandFile => {
+        const cmd = require(join(process.cwd(), commandFile));
         const dd = cmd.data;
-        if (!dd.name || !cmd.description) {
+        if (!dd.name || !dd.description) {
             return console.log(`------\nCommandes non-chargée: pas de nom/desciption\nFichier --> ${commandFile}`);
         }
         commands.push(cmd.data);
@@ -19,7 +18,7 @@ module.exports = async client => {
         console.log(`Commande chargée [🛢️] : ${dd.name}`, "\n_______________________________________")
     });
 
-    const rest = new REST({ version: '9' }).setToken(TOKEN);
+    const rest = new REST({ version: '10' }).setToken(TOKEN);
 
     (async () => {
         try {

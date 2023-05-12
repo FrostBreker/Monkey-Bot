@@ -1,0 +1,6 @@
+module.exports = {
+    guildId: "",
+    clientId: "",
+    channels: {},
+    roles: {},
+}

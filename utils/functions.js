@@ -1,31 +1,17 @@
-const mongoose = require("mongoose");
-
 module.exports = async client => {
 
-    //have timestamp
+    //MISC FUNCTIONS
+    //Get the timestamp
     client.timestampParser = num => {
-        if(num) {
-            let options = {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            };
-    
-            let date = new Date(num).toLocaleDateString("fr-FR", options);
-            return date.toString();
-        } else {
-            let options = {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            };
-    
-            let date = new Date(Date.now()).toLocaleDateString("fr-FR", options);
-            return date.toString();
-        }
-    }
+        const date = new Date(num ? num : Date.now()).toLocaleDateString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+        return date.toString();
+    };
 
-    //Is EMpty ??
+    //Check if a value is empty
     client.isEmpty = (value) => {
         return (
             value === undefined ||

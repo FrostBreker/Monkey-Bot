@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 require('dotenv').config();
-const DBCONECTION = process.env.DBCONECTION;
+const DBURI = process.env.DB;
 
 module.exports = {
     init: (date) => {
@@ -15,7 +15,7 @@ module.exports = {
             family: 4 // Use IPv4, skip trying IPv6
         }
 
-        mongoose.connect(DBCONECTION, mongOptions);
+        mongoose.connect(DBURI, mongOptions);
         mongoose.Promise = global.Promise;
         mongoose.connection.on("connected", () => console.log(`${date} => Mongoose is connected!`));
     }
