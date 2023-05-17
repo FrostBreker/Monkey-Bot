@@ -15,16 +15,12 @@ const client = new Client({
     partials: [
         Partials.Channel,
         Partials.GuildMember,
-        Partials.User
+        Partials.User,
+        Partials.Message,
+        Partials.Reaction
     ],
     intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildEmojisAndStickers,
-        GatewayIntentBits.GuildIntegrations,
-        GatewayIntentBits.GuildInvites,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.DirectMessages
+        131071
     ],
     restTimeOffset: 0
 });
@@ -42,9 +38,12 @@ client.commands = new Collection();
 //Setup Handlers
 ['CommandUtil', 'EventUtil'].forEach(handler => { require(`./utils/handlers/${handler}`)(client) });
 
+//Setup Global Variables
+globalThis.presenceChecker = [];
+
 //Handle Uncaught Errors
 process.on("exit", code => { console.log(`The process shutdown with error code: ${code}!`); });
-process.on("uncaughtException", (err, origin) => { console.log(`uncaughtException: ${err}`, `Origine: ${origin}`); });
+process.on("uncaughtException", (err, origin) => { console.log(`uncaughtException: ${err}`, `Origine: ${origin}`); console.log(err); });
 process.on("unhandledRejection", (reason, promise) => { console.log(`UNHANDLED_REJECTION: ${reason}\n--------\n`, promise); });
 process.on("warning", (...args) => { console.log(...args); });
 

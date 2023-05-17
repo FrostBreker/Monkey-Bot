@@ -13,7 +13,7 @@ module.exports = {
 
         if (interaction.isCommand()) {
             const cmd = client.commands.get(interaction.commandName);
-            if (!cmd) return await interaction.reply("Cette commande n'existe pas!");
+            if (!cmd) return await interaction.reply({ content: "An error has occurred.", ephemeral: true });
             return cmd.runSlash(client, interaction);
         }
     }

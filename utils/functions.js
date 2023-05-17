@@ -20,4 +20,13 @@ module.exports = async client => {
             (typeof value === "string" && value.trim().length === 0)
         );
     };
+
+    //Get difference between two array of objects
+    client.getDifference = (array1, array2) => {
+        return array1.filter(object1 => {
+            return !array2.some(object2 => {
+                return object1.id === object2.id;
+            });
+        });
+    };
 };
